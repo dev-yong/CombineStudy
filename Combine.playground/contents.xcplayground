@@ -5,7 +5,7 @@
         <page name='Subscriber'/>
         <page name='Subscription'/>
         <page name='Subject'/>
-        <page name='Custom_Publisher'/>
+        <page name='Advanced'/>
         <page name='BackPressure'/>
     </pages>
 </playground>

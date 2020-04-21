@@ -2,6 +2,6 @@ import Foundation
 
 public func example(_ description: String,
                     action: () -> Void) {
-  print("\n———", description, "———")
+  print("\n-----", description, "-----")
   action()
 }
