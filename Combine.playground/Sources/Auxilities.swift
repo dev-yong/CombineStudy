@@ -5,3 +5,7 @@ public func example(_ description: String,
   print("\n-----", description, "-----")
   action()
 }
+
+extension Notification.Name {
+    public static let custom = Notification.Name("CustomNotification")
+}

@@ -58,8 +58,4 @@ example("Publisher") {
     
     notificationCenter.post(name: .custom, object: "Hello Publihser")
 }
-
-extension Notification.Name {
-    static let custom = Notification.Name("CustomNotification")
-}
 //: [Next](@next)

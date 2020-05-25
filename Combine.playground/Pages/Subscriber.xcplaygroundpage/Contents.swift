@@ -9,7 +9,7 @@ import Combine
  
  [Documentation](https://developer.apple.com/documentation/combine/subscriber)
 */
-protocol _Subscriber: CustomCombineIdentifierConvertible {
+protocol _Subscriber {
 
     associatedtype Input
     associatedtype Failure: Error
