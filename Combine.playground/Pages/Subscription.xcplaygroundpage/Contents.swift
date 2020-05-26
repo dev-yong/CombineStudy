@@ -15,7 +15,7 @@ import Combine
 protocol _Subscription : Cancellable {
 
     /// Subscriber가 해당 함수를 호출하여 `.max()` 혹은 `.unlimited`으로
-    /// 더 많은 값을 받을 의사아 있음을 나타낸다.
+    /// 더 많은 값을 받을 의사가 있음을 나타낸다.
     func request(_ demand: Subscribers.Demand)
 }
 example("Subscription") {

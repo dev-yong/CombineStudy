@@ -4,6 +4,7 @@
         <page name='Publisher'/>
         <page name='Subscriber'/>
         <page name='Subscription'/>
+        <page name='Future'/>
         <page name='Subject'/>
         <page name='Advanced'/>
         <page name='BackPressure'/>
