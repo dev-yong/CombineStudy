@@ -9,28 +9,12 @@ import Combine
  
  [Documentation](https://developer.apple.com/documentation/combine/subscriber)
 */
-protocol _Subscriber {
-
-    associatedtype Input
-    associatedtype Failure: Error
-
-    /// Tells the subscriber that it has successfully subscribed to the publisher and may request items.
-    ///
-    /// Use the received `Subscription` to request items from the publisher.
-    func receive(subscription: Subscription)
-
-    /// Tells the subscriber that the publisher has produced an element.
-    func receive(_ input: Self.Input) -> Subscribers.Demand
-
-    /// Tells the subscriber that the publisher has completed publishing, either normally or with an error.
-    func receive(completion: Subscribers.Completion<Self.Failure>)
-}
 /*:
- ## Operator로 제공되어지는 Subscriber
- - `sink(receiveCompletion:, receiveValue:)`
-   - Closure 기반 동작으로 `Subscriber`를 연결한다.
-   - [`Subscriber`](Subscriber)를 생성하고 반환하기 전에,  무제한 수(`.unlimited`)의 value를 요청한다.
-   - `AnyCancellabel` instance를 반환한다.
+ ## sink
+ - Operator로 제공되는 subscriber.
+ - Closure 기반 동작으로 `Subscriber`를 연결한다.
+ - [`Subscriber`](Subscriber)를 생성하고 반환하기 전에,  무제한 수(`.unlimited`)의 value를 요청한다.
+ - `AnyCancellabel` instance를 반환한다.
  */
 example("sink") {
     let publihser = Just("Element")
@@ -41,9 +25,10 @@ example("sink") {
     })
 }
 /*:
- - `assign(to:, on:)`
-   - [`Publisher`](Publisher)에서 emit된 element를 객체의 속성에 할당한다.
-   - `AnyCancellabel` instance를 반환한다.
+ ## assign
+ - Operator로 제공되는 subscriber.
+ - [`Publisher`](Publisher)에서 emit된 element를 객체의 속성에 할당한다.
+ - `AnyCancellabel` instance를 반환한다.
  */
 example("assign") {
     class SomeObject {

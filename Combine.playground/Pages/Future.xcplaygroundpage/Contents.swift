@@ -8,13 +8,6 @@ import Combine
  
  [Documentation](https://developer.apple.com/documentation/combine/future)
  */
-final class _Future<Output, Failure>: Publisher where Failure: Error {
-
-    typealias Promise = (Result<Output, Failure>) -> Void
-
-    func receive<S>(subscriber: S) where Output == S.Input, Failure == S.Failure, S: Subscriber {}
-}
-
 var cancellableBag = Set<AnyCancellable>()
 
 example("Future") {

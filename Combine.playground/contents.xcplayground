@@ -6,6 +6,7 @@
         <page name='Subscription'/>
         <page name='Future'/>
         <page name='Subject'/>
+        <page name='TransformingOperator'/>
         <page name='Advanced'/>
         <page name='BackPressure'/>
     </pages>

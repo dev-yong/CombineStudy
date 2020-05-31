@@ -10,26 +10,7 @@ import Combine
  - `subscribe(_:)`의 구현부에서 `receive(subscriber:)`를 호출한다.
  
  [Documentation](https://developer.apple.com/documentation/combine/publisher)
- */
-protocol _Publisher {
-    associatedtype Output
-    associatedtype Failure : Error
-    
-    func receive<S>(subscriber: S)
-        where S: Subscriber,
-        Self.Failure == S.Failure,
-        Self.Output == S.Input
-}
 
-extension _Publisher {
-    func subscribe<S>(_ subscriber: S)
-        where S : Subscriber,
-        Self.Failure == S.Failure,
-        Self.Output == S.Input {
-            //...
-    }
-}
-/*:
  ## Event
  
  - Value(i.e. Element) Event
