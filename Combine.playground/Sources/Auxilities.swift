@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 public func example(_ description: String,
                     action: () -> Void) {
@@ -20,3 +21,5 @@ public enum CustomError: LocalizedError {
         }
     }
 }
+
+public var cancellableBag = Set<AnyCancellable>()

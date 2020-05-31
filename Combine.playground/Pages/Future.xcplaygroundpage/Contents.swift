@@ -8,8 +8,6 @@ import Combine
  
  [Documentation](https://developer.apple.com/documentation/combine/future)
  */
-var cancellableBag = Set<AnyCancellable>()
-
 example("Future") {
     
     func increment(_ value: Int,

@@ -18,18 +18,21 @@ example("collect") {
     let numbers = (0...10)
     numbers.publisher
         .sink { print("\($0)", terminator: " ") }
+        .store(in: &cancellableBag)
     print("")
     
     numbers.publisher
         .collect()
         .sink { print("\($0)") }
+        .store(in: &cancellableBag)
     
     numbers.publisher
         .collect(2)
         .sink { print("\($0)") }
+        .store(in: &cancellableBag)
 }
 example("collection with error") {
-    _ = (0...10).publisher
+    (0...10).publisher
         .tryMap {
             guard $0 == 5 else {
                 return
@@ -39,6 +42,7 @@ example("collection with error") {
         .collect()
         .sink(receiveCompletion: { print("Completion : ", $0) },
               receiveValue: { print("Value : ", $0) })
+        .store(in: &cancellableBag)
 }
 /*:
  ## map
@@ -46,13 +50,15 @@ example("collection with error") {
  [Documentation](https://developer.apple.com/documentation/combine/publisher/3204718-map)
  */
 example("map") {
-    _ = (0...10).publisher
+    (0...10).publisher
         .map { $0 * 2 }
         .sink { print("\($0)", terminator: " ") }
+        .store(in: &cancellableBag)
 }
 /*:
- ### Map Key Path
+ ## map (KeyPath)
  `map` operator를 이용하여 KeyPath를 publish할 수 있다.
+ [Documentation](https://developer.apple.com/documentation/combine/publisher/3343976-map)
  */
 example("map key path") {
     struct Position {
@@ -63,6 +69,7 @@ example("map key path") {
     Just(Position(x: Double.random(in: 0...375), y: Double.random(in: 0...812)))
         .map(\.x, \.y)
         .sink { print ("Value: \($0)") }
+        .store(in: &cancellableBag)
 }
 /*:
  ## tryMap
@@ -70,14 +77,87 @@ example("map key path") {
  [Documentation](https://developer.apple.com/documentation/combine/publisher/3204772-trymap)
  */
 example("tryMap") {
-    _ = (0...10).publisher
+    (0...10).publisher
         .tryMap {
             guard $0 == 5 else {
                 return $0
             }
             throw CustomError.custom(description: "Custom Error occurred")
+    }
+    .sink(receiveCompletion: { print("Completion : ", $0) },
+          receiveValue: { print("Value : ", $0) })
+    .store(in: &cancellableBag)
+}
+/*:
+ ## flatMap
+ Upstream publisher의 모든 element를 `maxPublisher`까지 새로운 publisher로 변환한다.
+ [Documentation](https://developer.apple.com/documentation/combine/publisher/3204712-flatmap)
+ */
+example("flatMap") {
+    struct Message {
+        let content: CurrentValueSubject<String, Never>
+    }
+    
+    let messageSubject = PassthroughSubject<Message, Never>()
+    
+    messageSubject.flatMap { message -> CurrentValueSubject<String, Never> in
+        return message.content
+    }.sink(receiveCompletion: { print("Completion : ", $0) },
+           receiveValue: { print("Value : ", $0) })
+        .store(in: &cancellableBag)
+    
+    messageSubject.flatMap(maxPublishers: .max(1)) { message -> CurrentValueSubject<String, Never> in
+        return message.content
+    }.sink(receiveCompletion: { print("Completion2 : ", $0) },
+           receiveValue: { print("Value2 : ", $0) })
+        .store(in: &cancellableBag)
+    
+    let message1 = Message(content: CurrentValueSubject<String, Never>("Hello"))
+    let message2 = Message(content: CurrentValueSubject<String, Never>("World"))
+    messageSubject.send(message1)
+    messageSubject.send(message2)
+    message1.content.send("안녕")
+    message2.content.send("세상")
+}
+/*
+ ## replaceNil
+ Upstream의 element 중 nil element를 제공된 element로 바꾼다.
+ [Documentation](https://developer.apple.com/documentation/combine/publisher/3204749-replacenil)
+ */
+example("replaceNIl") {
+    ["0", "1", "2", "Not Int"].publisher
+        .map { Int($0) }
+        .replaceNil(with: -1)
+        .sink { print("\($0)", terminator: " ") }
+        .store(in: &cancellableBag)
+}
+/*:
+ ## replaceEmpty
+ Upstream이 빈 stream일 경우 제공된 element로 바꾼다.
+ [Documentation](https://developer.apple.com/documentation/combine/publisher/3204747-replaceempty)
+ */
+example("replaceEmpty") {
+    [].publisher
+        .replaceEmpty(with: -1)
+        .sink { print("\($0)", terminator: " ") }
+        .store(in: &cancellableBag)
+    print("")
+    (0...10).publisher
+        .replaceEmpty(with:-1)
+        .sink { print("\($0)", terminator: " ") }
+        .store(in: &cancellableBag)
+}
+/*:
+ ## scan
+ Closure에서 반환한 마지막 값과 함께 현재 element를 closure에 제공하여 upstream publisher의 element를 변환한다.
+ */
+example("scan") {
+    (1...5).publisher
+        .scan(0) {
+            print($0, $1)
+            return $0 + $1
         }
-        .sink(receiveCompletion: { print("Completion : ", $0) },
-              receiveValue: { print("Value : ", $0) })
+        .sink { print ("\($0)", terminator: " ") }
+        .store(in: &cancellableBag)
 }
 //: [Next](@next)
