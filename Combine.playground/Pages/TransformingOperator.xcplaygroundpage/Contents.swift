@@ -31,6 +31,7 @@ example("collect") {
         .sink { print("\($0)") }
         .store(in: &cancellableBag)
 }
+
 example("collection with error") {
     (0...10).publisher
         .tryMap {
