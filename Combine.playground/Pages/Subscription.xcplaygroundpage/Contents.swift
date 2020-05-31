@@ -18,6 +18,7 @@ protocol _Subscription : Cancellable {
     /// 더 많은 값을 받을 의사가 있음을 나타낸다.
     func request(_ demand: Subscribers.Demand)
 }
+
 example("Subscription") {
     let subscription = NotificationCenter.default.publisher(for: .custom, object: nil)
         .map { $0.object as? String ?? "" }

@@ -12,7 +12,6 @@ import Combine
  [Documentation](https://developer.apple.com/documentation/combine/publisher)
  */
 protocol _Publisher {
-    
     associatedtype Output
     associatedtype Failure : Error
     
@@ -23,8 +22,6 @@ protocol _Publisher {
 }
 
 extension _Publisher {
-    
-    
     func subscribe<S>(_ subscriber: S)
         where S : Subscriber,
         Self.Failure == S.Failure,
