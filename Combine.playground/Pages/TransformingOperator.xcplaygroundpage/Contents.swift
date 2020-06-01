@@ -84,10 +84,10 @@ example("tryMap") {
                 return $0
             }
             throw CustomError.custom(description: "Custom Error occurred")
-    }
-    .sink(receiveCompletion: { print("Completion : ", $0) },
-          receiveValue: { print("Value : ", $0) })
-    .store(in: &cancellableBag)
+        }
+        .sink(receiveCompletion: { print("Completion : ", $0) },
+              receiveValue: { print("Value : ", $0) })
+        .store(in: &cancellableBag)
 }
 /*:
  ## flatMap
@@ -120,7 +120,7 @@ example("flatMap") {
     message1.content.send("안녕")
     message2.content.send("세상")
 }
-/*
+/*:
  ## replaceNil
  Upstream의 element 중 nil element를 제공된 element로 바꾼다.
  [Documentation](https://developer.apple.com/documentation/combine/publisher/3204749-replacenil)
@@ -129,7 +129,7 @@ example("replaceNIl") {
     ["0", "1", "2", "Not Int"].publisher
         .map { Int($0) }
         .replaceNil(with: -1)
-        .sink { print("\($0)", terminator: " ") }
+        .sink { print(String(describing: $0), terminator: " ") }
         .store(in: &cancellableBag)
 }
 /*:
@@ -158,7 +158,7 @@ example("scan") {
             print($0, $1)
             return $0 + $1
         }
-        .sink { print ("\($0)", terminator: " ") }
+        .sink { print ("Value : \($0)") }
         .store(in: &cancellableBag)
 }
 //: [Next](@next)
