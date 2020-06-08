@@ -1,11 +1,8 @@
 //: [Previous](@previous)
 import Foundation
 import Combine
-
 /*:
  # Filtering Operator
- */
-/*:
  ## filter
  제공된 closure와 일치하는 모든 element를 republish한다.
  */
