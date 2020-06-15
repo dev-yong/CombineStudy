@@ -3,6 +3,8 @@ import Foundation
 import Combine
 /*:
  # Filtering Operator
+**보완 필요!**
+ 
  ## filter
  제공된 closure와 일치하는 모든 element를 republish한다.
  */
