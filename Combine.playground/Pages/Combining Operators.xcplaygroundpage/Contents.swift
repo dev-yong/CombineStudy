@@ -117,14 +117,14 @@ example("switchToLatest URL") {
                 .map { UIImage(data: $0.data) }
                 .replaceError(with: nil)
                 .eraseToAnyPublisher()
-        }
+    }
         // 이전의 publisher에 대한 subscription은 cancel하기 때문에
         // 오로지 하나의 publisher만이 value를 emit할 것을 보장한다.
         .switchToLatest()
         .sink(
             receiveCompletion: { print("Complete: \($0)") },
-            receiveValue: { print("Value: \(String(describing: $0))")}
-        )
+            receiveValue: { _ in }
+    )
         .store(in: &cancellableBag)
     
     subject.send()
@@ -133,15 +133,58 @@ example("switchToLatest URL") {
     }
 }
 /*:
- # merge
+ ## merge
+ Original publisher의 elment를 동일한 유형의 다른 publisher의 element와 merge하여 'interleaves(교차 배치)'된 element sequence를 제공한다.
+ */
+example("merge") {
+    let publisher1 = PassthroughSubject<Int, Never>()
+    let publisher2 = PassthroughSubject<Int, Never>()
+    
+    publisher1
+        .merge(with: publisher2)
+        .sink(receiveCompletion: { print("Complete :", $0) },
+              receiveValue: { print("Value :", $0) })
+        .store(in: &cancellableBag)
+    
+    publisher1.send(1)
+    publisher1.send(2)
+    
+    publisher2.send(3)
+    
+    publisher1.send(4)
+    
+    publisher2.send(5)
+}
+/*:
+ ## combineLatest
+ 다른 type의 publisher 와 combine할 수 있다. 단, interleave(교차 배치)가 아닌 value가 있을 때마다 publisher들의 최신 value에 대한 tuple을 emit한다.
+ */
+example("combineLatest") {
+    let publisher1 = PassthroughSubject<Int, Never>()
+    let publisher2 = PassthroughSubject<String, Never>()
+    
+    publisher1
+        .combineLatest(publisher2)
+        .sink(receiveCompletion: { print("Complete :", $0) },
+              receiveValue: { print("Value - P1: \($0), P2: \($1)") })
+        .store(in: &cancellableBag)
+    
+    publisher1.send(1)
+    publisher1.send(2)
+    
+    publisher2.send("a")
+    publisher2.send("b")
+    
+    publisher1.send(3)
+    
+    publisher2.send("c")
+    
+    publisher1.send(completion: .finished)
+    publisher2.send("d")
+    publisher2.send(completion: .finished)
+}
+/*:
+ ## zip
  
  */
-/*:
- # combineLatest
-
-*/
-/*:
- # zip
-
-*/
 //: [Next](@next)
