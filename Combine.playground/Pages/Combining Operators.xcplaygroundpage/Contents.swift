@@ -106,6 +106,12 @@ example("switchToLatest") {
     publisher1.send(3)
     publisher2.send(4)
     publisher2.send(5)
+    
+    print("Need to complete all streams(include substream)")
+    publishers.send(completion: .finished)
+    
+    print("Now, it will complete")
+    publisher2.send(completion: .finished)
 }
 
 example("switchToLatest URL") {
@@ -180,11 +186,41 @@ example("combineLatest") {
     publisher2.send("c")
     
     publisher1.send(completion: .finished)
+    
     publisher2.send("d")
+    publisher1.send(4)
+    publisher2.send("e")
     publisher2.send(completion: .finished)
 }
 /*:
  ## zip
- 
+ - Element의 수가 더 작은 publisher가 complete될 때, complete된다.
  */
+example("zip") {
+    let publisher1 = PassthroughSubject<Int, Never>()
+    let publisher2 = PassthroughSubject<String, Never>()
+    
+    publisher1
+        .zip(publisher2)
+        .sink(receiveCompletion: { print("Complete :", $0) },
+              receiveValue: { print("Value - P1: \($0), P2: \($1)") })
+        .store(in: &cancellableBag)
+    
+    publisher1.send(1)
+    publisher1.send(2)
+    
+    publisher2.send("a")
+    publisher2.send("b")
+    
+    publisher1.send(3)
+    
+    publisher2.send("c")
+    
+    publisher1.send(completion: .finished)
+    
+    publisher2.send("d")
+    publisher1.send(4)
+    publisher2.send("e")
+    publisher2.send(completion: .finished)
+}
 //: [Next](@next)
