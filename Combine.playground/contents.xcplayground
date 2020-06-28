@@ -9,6 +9,7 @@
         <page name='TransformingOperator'/>
         <page name='Filtering Operator'/>
         <page name='Combining Operators'/>
+        <page name='Time Manipulation Operators'/>
         <page name='Advanced'/>
         <page name='BackPressure'/>
     </pages>
