@@ -171,13 +171,14 @@ example("count") {
 /*:
  ### contain
  - Upstream publihser에서 emit된 value들 중 특정 value와 동일할 경우 true를, 그렇지 않을 경우 false를 emit한다.
- - true일 경우, lazy하다.
+ - true일 경우 lazy, false일 경우 greedy하다.
  */
 example("contains") {
     let publisher = PassthroughSubject<Int, Never>()
     
     publisher
-        .contains(1)
+        .print()
+        .contains(5)
         .sink(receiveValue: { print("Value :", $0) })
         .store(in: &cancellableBag)
     
@@ -191,23 +192,24 @@ example("contains") {
 /*:
  ### allSatisfy
  - Upstream publisher에서 emit된 value들이 모두 predicate closure를 충족할 경우에 대하여 bool 값을 emit한다.
- - Greedy 하다.
+ - false일 경우 lazy, true일 경우 Greedy 하다.
  */
 example("allSatisfy") {
     let publisher = PassthroughSubject<Int, Never>()
     
     publisher
+    .print()
         .allSatisfy { $0 <= 5 }
         .sink(receiveValue: { print("Value :", $0) })
         .store(in: &cancellableBag)
     
     publisher.send(4)
-    publisher.send(3)
+    publisher.send(6)
     publisher.send(5)
     publisher.send(1)
     publisher.send(2)
 //    publisher.send(6)
-    publisher.send(completion: .finished)
+//    publisher.send(completion: .finished)
 }
 /*:
  ### reduce
