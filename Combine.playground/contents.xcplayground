@@ -9,9 +9,10 @@
         <page name='TransformingOperator'/>
         <page name='Filtering Operator'/>
         <page name='Combining Operators'/>
-        <page name='Time Manipulation Operators'/>
         <page name='Sequence Operators'/>
+        <page name='Resource Management'/>
         <page name='Advanced'/>
         <page name='BackPressure'/>
+        <page name='Schedulers'/>
     </pages>
 </playground>
